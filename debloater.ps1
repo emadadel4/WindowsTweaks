@@ -4,6 +4,7 @@ $appsToRemove = @(
     "Microsoft.BingNews"
     "Microsoft.GetHelp"
     "Microsoft.Getstarted"
+    "Microsoft.BingWeather"
     "Microsoft.Messaging"
     "Microsoft.Microsoft3DViewer"
     "Microsoft.MicrosoftOfficeHub"
