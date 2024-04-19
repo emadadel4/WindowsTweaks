@@ -35,7 +35,8 @@ $appsToRemove = @(
     "Microsoft.XboxSpeechToTextOverlay"
     "Microsoft.ZuneMusic"
     "Microsoft.ZuneVideo"
-    "Microsoft.Windows.Cortana",
+    "Microsoft.Windows.Cortana"
+    "Microsoft.Windows.DevHome"
     "Microsoft.MSPaint"
     "EclipseManager"
     "ActiproSoftwareLLC"
