@@ -27,6 +27,7 @@ $appsToRemove = @(
     "microsoft.windowscommunicationsapps"
     "Microsoft.WindowsFeedbackHub"
     "Microsoft.WindowsMaps"
+    "Microsoft.YourPhone"
     "Microsoft.WindowsSoundRecorder"
     "Microsoft.Xbox.TCUI"
     "Microsoft.XboxApp"
