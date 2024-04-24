@@ -38,6 +38,7 @@ $appsToRemove = @(
     "Microsoft.ZuneVideo"
     "Microsoft.Windows.Cortana"
     "Microsoft.Windows.DevHome"
+    "Microsoft.MixedReality.Portal"
     "Microsoft.MSPaint"
     "EclipseManager"
     "ActiproSoftwareLLC"
