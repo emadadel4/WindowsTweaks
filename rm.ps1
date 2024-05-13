@@ -33,4 +33,3 @@ foreach ($folder in $folders) {
     }
 }
 
-Start-Process "explorer.exe"
