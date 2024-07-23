@@ -1,3 +1,4 @@
+# Credit: https://lazyadmin.nl/win-11/customize-windows-11-start-menu-layout/
 function ClearStartMenu {
     param (
         $message,
@@ -89,7 +90,6 @@ function ClearStartMenu {
     }
 }
 
-# Unpin all Start Menu tiles - Note: This function has no counterpart. You have to pin the tiles back manually.
 Function UnpinStartMenuTiles {
 	Write-Output "Unpinning all Start Menu tiles..."
 	$errpref = $ErrorActionPreference #save actual preference
