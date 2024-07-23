@@ -1,4 +1,3 @@
-
 function ClearStartMenu {
     param (
         $message,
@@ -89,4 +88,61 @@ function ClearStartMenu {
         }
     }
 }
-ClearStartMenu
+
+Function UnpinStartMenuTiles {
+	Write-Output "Unpinning all Start Menu tiles..."
+	$errpref = $ErrorActionPreference #save actual preference
+        $ErrorActionPreference = "silentlycontinue"
+		If ([System.Environment]::OSVersion.Version.Build -ge 22000) {
+		Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "NoRecentDocsHistory" -Type DWord -Value 0 | Out-Null -ErrorAction SilentlyContinue
+		Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "Start_TrackDocs" -Type DWord -Value 0 | Out-Null -ErrorAction SilentlyContinue
+		Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "NoStartMenuMorePrograms" | Out-Null -ErrorAction SilentlyContinue
+		Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "NoStartMenuMorePrograms" | Out-Null -ErrorAction SilentlyContinue
+		Remove-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer" -Name "LockedStartLayout" | Out-Null -ErrorAction SilentlyContinue
+		Remove-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer" -Name "StartLayoutFile" | Out-Null -ErrorAction SilentlyContinue
+		Remove-ItemProperty -Path "HKCU:\SOFTWARE\Policies\Microsoft\Windows\Explorer" -Name "LockedStartLayout" | Out-Null -ErrorAction SilentlyContinue
+		Remove-ItemProperty -Path "HKCU:\SOFTWARE\Policies\Microsoft\Windows\Explorer" -Name "StartLayoutFile" | Out-Null -ErrorAction SilentlyContinue
+		Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "Start_Layout" -Type DWord -Value 1 | Out-Null -ErrorAction SilentlyContinue
+	} Else {
+	Invoke-WebRequest -Uri "https://git.io/JL54C" -OutFile "$env:UserProfile\StartLayout.xml" -ErrorAction SilentlyContinue
+	Import-StartLayout -layoutpath "$env:UserProfile\StartLayout.xml" -MountPath "$env:SystemDrive\"
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer" -Name "LockedStartLayout" -Type DWord -Value 1 | Out-Null -ErrorAction SilentlyContinue
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer" -Name "StartLayoutFile" -Type ExpandString -Value "%USERPROFILE%\StartLayout.xml" | Out-Null -ErrorAction SilentlyContinue
+	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "NoStartMenuMorePrograms" -Type DWord -Value 0 | Out-Null -ErrorAction SilentlyContinue
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "NoStartMenuMorePrograms" -Type DWord -Value 0 | Out-Null -ErrorAction SilentlyContinue
+        Start-Sleep -s 3
+        $wshell = New-Object -ComObject wscript.shell; $wshell.SendKeys('^{ESCAPE}')
+        Start-Sleep -s 3
+	function get-itemproperty2 {
+  # get-childitem skips top level key, use get-item for that
+  # set-alias gp2 get-itemproperty2
+  param([parameter(ValueFromPipeline)]$key)
+  process {
+    $key.getvaluenames() | foreach-object {
+      $value = $_
+      [pscustomobject] @{
+        Path = $Key -replace 'HKEY_CURRENT_USER',
+          'HKCU:' -replace 'HKEY_LOCAL_MACHINE','HKLM:'
+        Name = $Value
+        Value = $Key.GetValue($Value)
+        Type = $Key.GetValueKind($Value)
+		}
+      }
+    }
+  }
+}
+
+$osInfo = Get-ComputerInfo
+$osName = $osInfo.WindowsVersion
+$osBuild = $osInfo.WindowsBuildLabEx
+
+if ($osName -ge "10.0" -and $osBuild -like "*22000*") {
+    ClearStartMenu
+} elseif ($osName -ge "10.0") {
+    UnpinStartMenuTiles
+} else {
+    "Older version or not recognized"
+}
+
+
+
