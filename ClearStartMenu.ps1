@@ -132,10 +132,6 @@ Function UnpinStartMenuTiles {
   }
 }
 
-$osInfo = Get-ComputerInfo
-$osName = $osInfo.WindowsVersion
-$osBuild = $osInfo.WindowsBuildLabEx
-
 $regKey = Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
 $edition = $regKey.ProductName
 $releaseId = $regKey.ReleaseId
