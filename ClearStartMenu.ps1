@@ -136,9 +136,13 @@ $osInfo = Get-ComputerInfo
 $osName = $osInfo.WindowsVersion
 $osBuild = $osInfo.WindowsBuildLabEx
 
-if ($osName -ge "10.0" -and $osBuild -like "*22000*") {
+$regKey = Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
+$edition = $regKey.ProductName
+$releaseId = $regKey.ReleaseId
+
+if ($releaseId -ge "22000") {
     ClearStartMenu
-} elseif ($osName -ge "10.0") {
+} elseif ($releaseId -ge "19043") {
     UnpinStartMenuTiles
 } else {
     "Older version or not recognized"
