@@ -39,12 +39,12 @@ function ClearStartMenu {
                 # Copy template file
                 Copy-Item -Path $startmenuTemplate -Destination $startmenu -Force
 
-                Write-Output "Replaced start menu for user $($startmenu.FullName.Split('\')[2])"
+                Write-Host " Replaced start menu for user $($startmenu.FullName.Split('\')[2])" -ForegroundColor Yellow
             }
             else {
                 # Bin file doesn't exist, indicating the user is not running the correct version of Windows. Exit function
                 Write-Host "Error: Unable to clear start menu, start2.bin file could not be found for user $($startmenu.FullName.Split('\')[2])" -ForegroundColor Red
-                Write-Output ""
+                Write-Host ""
                 return
             }
         }
@@ -57,13 +57,13 @@ function ClearStartMenu {
         # Create folder if it doesn't exist
         if (-not(Test-Path $defaultProfile)) {
             New-Item $defaultProfile -ItemType Directory -Force | Out-Null
-            Write-Output "Created LocalState folder for default user"
+            Write-Host " Created LocalState folder for default user" -ForegroundColor Yellow
         }
 
         # Copy template to default profile
         Copy-Item -Path $startmenuTemplate -Destination $defaultProfile -Force
-        Write-Output "Copied start menu template to default user folder"
-        Write-Output ""
+        Write-Host " Copied start menu template to default user folder" -ForegroundColor Yellow
+        Write-Host ""
     }
     else {
         # Only remove startmenu pinned apps for current logged in user
@@ -78,13 +78,13 @@ function ClearStartMenu {
             # Copy template file
             Copy-Item -Path $startmenuTemplate -Destination $startmenuBinFile -Force
 
-            Write-Output "Replaced start menu for user $([Environment]::UserName)"
-            Write-Output ""
+            Write-Host " Replaced start menu for user $([Environment]::UserName)" -ForegroundColor Yellow
+            Write-Host ""
         }
         else {
             # Bin file doesn't exist, indicating the user is not running the correct version of Windows. Exit function
             Write-Host "Error: Unable to clear start menu, start2.bin file could not be found for user $([Environment]::UserName)" -ForegroundColor Red
-            Write-Output ""
+            Write-Host ""
             return
         }
     }
