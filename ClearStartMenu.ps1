@@ -89,6 +89,7 @@ function ClearStartMenu {
     }
 }
 
+# Unpin all Start Menu tiles - Note: This function has no counterpart. You have to pin the tiles back manually.
 Function UnpinStartMenuTiles {
 	Write-Output "Unpinning all Start Menu tiles..."
 	$errpref = $ErrorActionPreference #save actual preference
@@ -131,18 +132,18 @@ Function UnpinStartMenuTiles {
     }
   }
 }
+$YourInputStart = "02,00,00,00,e6,d9,21,ac,f8,e0,d6,01,00,00,00,00,43,42,01,00,c2,14,01,cb,32,0a,03,05,ce,ab,d3,e9,02,24,da,f4,03,44,c3,8a,01,66,82,e5,8b,b1,ae,fd,fd,bb,3c,00,05,a0,8f,fc,c1,03,24,8a,d0,03,44,80,99,01,66,b0,b5,99,dc,cd,b0,97,de,4d,00,05,86,91,cc,93,05,24,aa,a3,01,44,c3,84,01,66,9f,f7,9d,b1,87,cb,d1,ac,d4,01,00,c2,3c,01,c5,5a,01,00"
+$hexifiedStart = $YourInputStart.Split(',') | ForEach-Object { "0x$_"}
+Get-ChildItem -r "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\CloudStore\Store\Cache\DefaultAccount\" | get-itemproperty2 | Where-Object { $_ -like '*windows.data.unifiedtile.startglobalproperties*' } | set-itemproperty -value (([byte[]]$hexifiedStart))
+Stop-Process -name explorer | Out-Null
+	$ErrorActionPreference = $errpref #restore previous preference
+}
 
-$regKey = Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
-$edition = $regKey.ProductName
-$releaseId = $regKey.ReleaseId
-
-if ($releaseId -ge "22000") {
+$version = [System.Environment]::OSVersion.Version
+if ($version.Major -eq 10 -and $version.Build -ge 22000) {
     ClearStartMenu
-} elseif ($releaseId -ge "19043") {
+} elseif ($version.Major -eq 10) {
     UnpinStartMenuTiles
 } else {
     "Older version or not recognized"
 }
-
-
-
