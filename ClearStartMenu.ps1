@@ -151,7 +151,7 @@ function Windows10 {
 
 $version = [System.Environment]::OSVersion.Version
 if ($version.Major -eq 10 -and $version.Build -ge 22000) {
-    #Windows11
+    Windows11
 } elseif ($version.Major -eq 10) {
     Windows10
 } else {
