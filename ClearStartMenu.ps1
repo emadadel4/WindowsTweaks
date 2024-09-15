@@ -141,7 +141,7 @@ function Windows10 {
     }
 
     #Restart Explorer and delete the layout file
-    Stop-Process -name explorer
+    Stop-Process -Name explorer -Force
 
     # Uncomment the next line to make clean start menu default for all new users
     #Import-StartLayout -LayoutPath $layoutFile -MountPath $env:SystemDrive\
