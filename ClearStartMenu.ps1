@@ -128,7 +128,7 @@ function Windows10 {
     }
 
     #Restart Explorer, open the start menu (necessary to load the new layout), and give it a few seconds to process
-    Stop-Process -name explorer
+    Stop-Process -Name explorer -Force
     Start-Sleep -s 5
     $wshell = New-Object -ComObject wscript.shell; $wshell.SendKeys('^{ESCAPE}')
     Start-Sleep -s 5
